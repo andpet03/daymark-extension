@@ -1,0 +1,22 @@
+DAYMARK — VERSION 0.1.1
+
+1. Extract this ZIP into a permanent folder.
+2. Open Chrome and type chrome://extensions in the address bar.
+3. Turn on Developer mode (top right).
+4. Click Load unpacked.
+5. Select the daymark folder containing manifest.json.
+6. Open a new tab. Accept the new-tab change if Chrome asks.
+
+First test: add example.com to the blocklist, set 1 minute and click
+Begin focus. Visit example.com in a separate tab. End the session
+and reload example.com: it should work again.
+
+Make it yours opens the background/photo settings. Real photos are
+optional and require internet. Uploads and colour backgrounds work offline.
+
+Full instructions: README.md
+Hands-on checks: docs/TESTING.md
+
+Owner browser checks and screenshots are recorded in docs/TESTING.md.
+This is a local extension, not a Chrome Web Store release.
+Music links open Spotify/Apple Music; they do not connect your account.

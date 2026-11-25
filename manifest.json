@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Daymark \u2014 Make room for focus",
+  "version": "0.1.1",
+  "minimum_chrome_version": "116",
+  "description": "A personal new tab with focus sessions, website blocking, ambient audio and small next steps.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "declarativeNetRequest",
+    "offscreen"
+  ],
+  "optional_permissions": [
+    "tabs"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "action": {
+    "default_title": "Open Daymark"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "128": "assets/icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; img-src 'self' data: https://images.unsplash.com; connect-src 'none'"
+  }
+}
