@@ -1,46 +1,31 @@
-# Publication audit — Daymark
+# Daymark — Development audit
 
-Date: 25 November 2026. Scope: local version 0.1.1 source and documentation package intended for https://github.com/andpet03/daymark-extension.
+## 1. Initial prompt and first version
 
-## Method and boundaries
+I asked ChatGPT/Codex to help build an original Chrome extension inspired by Momentum. My initial request included:
 
-Read-only review phases inspected source/configuration, test definitions, file inventory, exclusion rules, README and linked evidence. Static inspection scripts read files and checked references; they did not import or execute project code. No extension, tests, server, database operation, commit or push was run during this audit. Documentation corrections and packaging were separate authorised preparation steps, followed by a static recheck.
+> It needs to be an extension similar to Momentum. First thing that I would like to do is define the features the extension could have. I want it to be original, so propose me some original features that it might include and then we can go ahead with the building process
 
-The local folder is not a Git checkout: `git status` reported that no repository was present. Tracked files, ignored-file behaviour against a real index, branches, remote commits and Git history could not be inspected. The GitHub URL could not be fetched from this environment. This report does not certify the remote repository or its final upload.
+I then requested a focus mode with website blocking, focus sounds or music options, and landscape backgrounds or uploaded photos. The first version included a focus timer, blocking controls, task suggestions, backgrounds and audio controls. The delivered music feature uses saved Spotify/Apple Music links, rather than connecting to those accounts.
 
-## Checks
+## 2. Testing and issues found
 
-- Reviewed manifest permissions, CSP, worker message routing, blocking rules, local storage, audio implementation, task handling, image uploads, music URL validation and backup import/export.
-- Inspected tests as source only. Historical development result: nine Node tests passed; these were not rerun during the audit.
-- Inspected source/configuration and searched for common private-key and credential patterns. No real credentials were identified. Test strings such as a sample URL containing `user:pass` are validation fixtures, not service credentials.
-- No `.env`, private backup JSON, dependency folder, browser profile, user database or runtime cache is included. Runtime user state lives in Chrome storage, outside the repository.
-- `.gitignore` excludes environment files, dependencies, logs, coverage and default-named Daymark backups. Renamed private backups still require deliberate exclusion; browser uploads do not automatically enforce Git ignore rules.
-- User-entered task text is rendered using `textContent`; music links are restricted to HTTPS Spotify/Apple Music hosts. Scripts are local. Optional remote landscape images and their privacy implications are documented.
-- README covers purpose, collection, persistence, interaction, installation, development lessons, limitations and AI assistance. Local Markdown/image references were checked after the report was added.
-- Ten owner-supplied screenshots document the interface and backup check. They contain demonstration tasks, an example blocked domain and a first name, supplied for README use. No credentials or private JSON backups are included.
+I loaded the extension in Chrome and tried its interface. The “Add task” button extended outside its panel, and the central task section did not clearly explain what users should do or how it related to the focus timer. I supplied a screenshot showing the layout problem.
 
-## Confirmed findings and resolution
+Installation also caused confusion: Chrome's folder picker showed folders rather than individual files, and the downloaded directory could have a different name from the instructions.
 
-| ID | Finding | Resolution |
-| --- | --- | --- |
-| D01 — low | `README.md` and `docs/TESTING.md` still described browser checks and screenshot evidence as wholly pending despite later owner confirmations. | Updated the status, separated owner-reported checks from automated tests, added screenshots and retained a specific list of unverified browser scenarios. Static recheck completed. |
-| D02 — low | README installation assumed the extracted directory was always named `daymark`, which would confuse users downloading `daymark-extension-main` from GitHub. | Installation now identifies the directory by `manifest.json`, lists both possible names, and explains why the picker shows only folders. Static recheck completed. |
-| D03 — low | No repository audit record was present. | Added this sanitised report after the read-only review. The initially unresolved README link to this report was checked again after creation. |
+## 3. Request for corrections
 
-No confirmed credential leak or unresolved publication-blocking issue was identified in this local package. This is not proof of safety or a complete security assessment.
+I reported the interface issues with this prompt:
 
-## Remaining limitations and recommended improvements
+> there is stuff to fix. First, the "Add task" gets out of the rectangle. Also, better explain me what is the purpose of the central part and make it more intuitive for the user.
 
-1. **Broader browser checks:** restart recovery, optional handling of existing tabs, automatic audio stop at expiry, every photo preset, scene round trips, music links and keyboard/zoom coverage are not independently established. Follow `docs/TESTING.md` and record actual results rather than extrapolating from screenshots.
-2. **Concurrent edits:** whole-list settings patches can overwrite simultaneous edits in another dashboard. Use one editing tab for now; future work should use item-level operations or revisions.
-3. **Import robustness:** `core.js` bounds and validates important values, but malformed nested backup entries can produce a generic caught error and duplicate imported task IDs are not rejected. Add stricter structure/uniqueness checks and adversarial import tests in future. No backup content is executed as code.
-4. **Attribution:** landscape provider URLs and the Unsplash licence are recorded, but specific photographer identities/original photo pages remain unverified. Add verified credits when available; do not guess. No downloaded landscape files are bundled.
-5. **Blocking scope:** top-level network navigation blocking is a voluntary aid, not a security boundary. Cached content, other profiles/browsers and already-loaded pages have limitations documented in the README.
-6. **Readable source:** several source files contain long compact lines. Reformatting would improve future review and maintenance; runtime behaviour was left unchanged during this documentation update.
-7. **Repository verification:** after upload, check root paths, the rendered README/images and public accessibility while logged out. Review tracked files and Git history when a checkout is available. Do not upload personal backup files.
+I also asked which folder to select when loading the unpacked extension.
 
-## Evidence and follow-through
+## 4. Fixes and result after testing again
 
-The earlier Add task overflow and unclear task workflow were corrected in v0.1.1 before this audit. The owner confirmed the improvement and supplied screenshots. Later confirmations covered ending focus early, natural expiry, sound continuity and stopping, persistence, and backup restoration. The before/after backup screenshots show the temporary task disappearing while original tasks remain. These are owner reports; audio and persistence cannot be proven by a still screenshot alone.
+- **Layout:** the cramped task form was reorganised, with a full-width “Add to my tasks” button on its own row.
+- **Clarity:** the task panel was divided into labelled steps for adding a task and choosing the next one. Instructions explain that “Use task” fills the focus panel and that “Begin focus” starts the timer.
+- **Installation:** the instructions identify the correct directory by the presence of `manifest.json`, including GitHub's extracted folder name.
 
-The publication preparation changes documentation and adds screenshots/report only. Source and manifest remain identical to the previously delivered v0.1.1 package. Static recheck verifies source equality, document/image links, inventory and selected credential patterns. No commits or push were performed. A separate course audit-evidence PDF remains to be prepared for submission.
+I checked the updated interface and confirmed that it was satisfactory. The later screenshots show the button contained within its panel, clearer task fields and a separate suggestion area. I also supplied screenshots showing an active focus timer and Instagram blocked, and confirmed the backup-restoration check. These are observations from my Chrome checks, not a claim that every browser scenario was tested.
